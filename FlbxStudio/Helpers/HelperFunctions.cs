@@ -4,10 +4,20 @@ using System.Reflection;
 
 namespace FlbxStudio.Helpers
 {
+    /// <summary>
+    /// Provides helper values and methods shared across the application.
+    /// </summary>
     public static class HelperFunctions
     {
+        /// <summary>
+        /// The display name of the application.
+        /// </summary>
         public static string AppName = "FlbxStudio";
 
+        /// <summary>
+        /// Gets the current assembly version string.
+        /// </summary>
+        /// <returns>The assembly version or an empty string when unavailable.</returns>
         public static string GetAssemblyVersion()
         {
             return Assembly.GetExecutingAssembly().GetName().Version?.ToString()

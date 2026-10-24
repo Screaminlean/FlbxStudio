@@ -11,6 +11,9 @@ using Wpf.Ui.Appearance;
 
 namespace FlbxStudio.ViewModels.Pages
 {
+    /// <summary>
+    /// Provides user-facing settings state and commands for theme, localization, and library paths.
+    /// </summary>
     public partial class SettingsViewModel : ObservableObject, INavigationAware
     {
         private bool _isInitialized = false;
@@ -36,6 +39,10 @@ namespace FlbxStudio.ViewModels.Pages
         private string? _selectedLanguage;
 
         private string _userLibraryPath = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the configured User library root path.
+        /// </summary>
         public string UserLibraryPath
         {
             get => _userLibraryPath;
@@ -49,6 +56,10 @@ namespace FlbxStudio.ViewModels.Pages
         }
 
         private string _easyBuilderLibraryPath = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the configured EasyBuilder (Program) library root path.
+        /// </summary>
         public string EasyBuilderLibraryPath
         {
             get => _easyBuilderLibraryPath;
@@ -61,11 +72,24 @@ namespace FlbxStudio.ViewModels.Pages
             }
         }
 
+        /// <summary>
+        /// Gets the command that opens a folder picker for the User library path.
+        /// </summary>
         public ICommand BrowseUserLibraryPathButtonCommand { get; }
+
+        /// <summary>
+        /// Gets the command that opens a folder picker for the EasyBuilder library path.
+        /// </summary>
         public ICommand BrowseEasyBuilderLibraryPathButtonCommand { get; }
 
         private readonly ILocalizationService _loc;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SettingsViewModel"/> class.
+        /// </summary>
+        /// <param name="appConfig">Application-level configuration service.</param>
+        /// <param name="userConfig">User-level configuration service.</param>
+        /// <param name="loc">Localization service.</param>
         public SettingsViewModel(AppConfigService appConfig, UserConfigService userConfig, ILocalizationService loc)
         {
             ArgumentNullException.ThrowIfNull(appConfig);
@@ -122,6 +146,10 @@ namespace FlbxStudio.ViewModels.Pages
             }
         }
 
+        /// <summary>
+        /// Handles navigation activation for the settings page.
+        /// </summary>
+        /// <returns>A completed task.</returns>
         public Task OnNavigatedToAsync()
         {
             if (!_isInitialized)
@@ -130,6 +158,10 @@ namespace FlbxStudio.ViewModels.Pages
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Handles navigation deactivation for the settings page.
+        /// </summary>
+        /// <returns>A completed task.</returns>
         public Task OnNavigatedFromAsync() => Task.CompletedTask;
 
         private void InitializeViewModel()

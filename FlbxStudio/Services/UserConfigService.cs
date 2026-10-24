@@ -62,11 +62,19 @@ namespace FlbxStudio.Services
         /// Changes to this value require saving the configuration to persist between sessions.
         /// </remarks>
         public string Theme { get; set; } = "Dark";
+
+        /// <summary>
+        /// Gets or sets the UI language code for localization.
+        /// </summary>
         public string Language { get; set; } = "en";
 
         #region Add more configuration properties here
         // e.g.
         // public int MaxItems { get; set; } = 100;
+
+        /// <summary>
+        /// Gets or sets the default user library root path used for file browsing.
+        /// </summary>
         public string UserLibraryPath { get; set; } = "C:\\EBpro\\library\\picture";
         #endregion
 

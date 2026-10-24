@@ -15,6 +15,10 @@ namespace FlbxStudio.Services
 
         private INavigationWindow _navigationWindow;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApplicationHostService"/> class.
+        /// </summary>
+        /// <param name="serviceProvider">The application service provider used to resolve window services.</param>
         public ApplicationHostService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;

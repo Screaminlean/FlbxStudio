@@ -12,6 +12,11 @@ namespace FlbxStudio.Services;
 /// asset names, state order, image format metadata, and raw image bytes.</remarks>
 public class FlbxService : IFlbxService
 {
+    /// <summary>
+    /// Parses an FLBX file into a list of vector assets and their states.
+    /// </summary>
+    /// <param name="filePath">Path to the FLBX file to parse.</param>
+    /// <returns>The parsed FLBX assets in file order.</returns>
     public List<HmiVectorAsset> ParseFlbx(string filePath)
     {
         var assetList = new List<HmiVectorAsset>();

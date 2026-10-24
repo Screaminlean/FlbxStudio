@@ -247,6 +247,7 @@ namespace FlbxStudio.Services
         /// Saves the specified application configuration to disk and notifies the user of the operation result.
         /// </summary>
         /// <param name="config">The <see cref="AppConfigService"/> instance to save.</param>
+        /// <param name="loc">Localization service used to resolve notification text.</param>
         /// <remarks>
         /// This method:
         /// <list type="bullet">

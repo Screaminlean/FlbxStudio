@@ -21,14 +21,33 @@ public partial class HomeViewModel : ObservableObject, INavigationAware
     /// </summary>
     public ObservableCollection<HmiVectorAsset> Assets { get; set; } = new();
 
+    /// <summary>
+    /// Gets the folder entries used by the Program library folder selector.
+    /// </summary>
     public ObservableCollection<LibraryFolderEntry> ProgramLibraryFolders { get; } = new();
+
+    /// <summary>
+    /// Gets the folder entries used by the User library folder selector.
+    /// </summary>
     public ObservableCollection<LibraryFolderEntry> UserLibraryFolders { get; } = new();
+
+    /// <summary>
+    /// Gets the file entries shown for the selected Program library folder.
+    /// </summary>
     public ObservableCollection<LibraryFileEntry> ProgramLibraryFiles { get; } = new();
+
+    /// <summary>
+    /// Gets the file entries shown for the selected User library folder.
+    /// </summary>
     public ObservableCollection<LibraryFileEntry> UserLibraryFiles { get; } = new();
     private bool _suppressAutoOpen;
     private string? _currentFlbxFilePath;
 
     private LibraryFolderEntry? _selectedProgramLibraryFolder;
+
+    /// <summary>
+    /// Gets or sets the selected Program library folder.
+    /// </summary>
     public LibraryFolderEntry? SelectedProgramLibraryFolder
     {
         get => _selectedProgramLibraryFolder;
@@ -42,6 +61,10 @@ public partial class HomeViewModel : ObservableObject, INavigationAware
     }
 
     private LibraryFolderEntry? _selectedUserLibraryFolder;
+
+    /// <summary>
+    /// Gets or sets the selected User library folder.
+    /// </summary>
     public LibraryFolderEntry? SelectedUserLibraryFolder
     {
         get => _selectedUserLibraryFolder;
@@ -55,6 +78,10 @@ public partial class HomeViewModel : ObservableObject, INavigationAware
     }
 
     private LibraryFileEntry? _selectedProgramLibraryFile;
+
+    /// <summary>
+    /// Gets or sets the selected Program library file.
+    /// </summary>
     public LibraryFileEntry? SelectedProgramLibraryFile
     {
         get => _selectedProgramLibraryFile;
@@ -68,6 +95,10 @@ public partial class HomeViewModel : ObservableObject, INavigationAware
     }
 
     private LibraryFileEntry? _selectedUserLibraryFile;
+
+    /// <summary>
+    /// Gets or sets the selected User library file.
+    /// </summary>
     public LibraryFileEntry? SelectedUserLibraryFile
     {
         get => _selectedUserLibraryFile;
@@ -104,8 +135,16 @@ public partial class HomeViewModel : ObservableObject, INavigationAware
         RefreshLibraryEntries();
     }
 
+    /// <summary>
+    /// Handles navigation activation for the page.
+    /// </summary>
+    /// <returns>A completed task.</returns>
     public Task OnNavigatedToAsync() => Task.CompletedTask;
 
+    /// <summary>
+    /// Handles navigation deactivation and clears selection state.
+    /// </summary>
+    /// <returns>A completed task.</returns>
     public Task OnNavigatedFromAsync()
     {
         ClearLibrarySelections();
@@ -382,6 +421,64 @@ public partial class HomeViewModel : ObservableObject, INavigationAware
         _currentFlbxFilePath = null;
     }
 
-    public sealed record LibraryFolderEntry(string Name, string FullPath, bool IncludeSubfolders);
-    public sealed record LibraryFileEntry(string Name, string FullPath);
+    /// <summary>
+    /// Represents a selectable library folder entry.
+    /// </summary>
+    public sealed record LibraryFolderEntry
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LibraryFolderEntry"/> record.
+        /// </summary>
+        /// <param name="name">Display name for the folder entry.</param>
+        /// <param name="fullPath">Absolute folder path.</param>
+        /// <param name="includeSubfolders">Indicates whether file enumeration should include subfolders.</param>
+        public LibraryFolderEntry(string name, string fullPath, bool includeSubfolders)
+        {
+            Name = name;
+            FullPath = fullPath;
+            IncludeSubfolders = includeSubfolders;
+        }
+
+        /// <summary>
+        /// Gets the display name for the folder entry.
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// Gets the absolute directory path represented by this entry.
+        /// </summary>
+        public string FullPath { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether subfolders should be included when listing files.
+        /// </summary>
+        public bool IncludeSubfolders { get; }
+    }
+
+    /// <summary>
+    /// Represents a selectable FLBX file entry.
+    /// </summary>
+    public sealed record LibraryFileEntry
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LibraryFileEntry"/> record.
+        /// </summary>
+        /// <param name="name">Display name for the file entry.</param>
+        /// <param name="fullPath">Absolute file path.</param>
+        public LibraryFileEntry(string name, string fullPath)
+        {
+            Name = name;
+            FullPath = fullPath;
+        }
+
+        /// <summary>
+        /// Gets the display name for the file entry.
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// Gets the absolute file path represented by this entry.
+        /// </summary>
+        public string FullPath { get; }
+    }
 }
