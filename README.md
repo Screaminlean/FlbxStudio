@@ -44,6 +44,7 @@ Current baseline: **beta-ready**.
 - [ ] Duplicate state action (clone an existing state in the selected asset)
 - [ ] PNG color changer for quick recolor workflows
 - [ ] Create new states directly from duplicated states with color edits
+- [ ] Export state images to PNG for external editing
 
 ### Later roadmap
 
