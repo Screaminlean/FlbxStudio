@@ -13,6 +13,26 @@ Current baseline: **beta-ready**.
 - Save dialogs now default to the active FLBX filename and folder.
 - Settings includes configurable Program/User library root paths.
 
+## Usage
+
+1. Open **Settings** and configure:
+   - **EasyBuilder Library Path** (Program libraries)
+   - **User Library Path** (User libraries)
+   - Click **Save** on each tab after changes.
+2. Go to **Program** or **User** from the left navigation.
+3. In the page header:
+   - Use **Open FLBX Library** to open a file directly, or
+   - Pick a folder and then a file from the two combo boxes (selecting a file loads it).
+4. Edit assets:
+   - Select an asset from the left list.
+   - Rename in the asset name box.
+   - Use **Add Asset** to create a new asset.
+   - Use **Import Frame(s)** to add PNG/BMP states.
+   - Use **Remove** on a state card to delete a state.
+   - Use **Delete Asset** to remove the selected asset.
+5. Click **Save FLBX Library** to save.
+   - The dialog defaults to the current FLBX filename and folder when available.
+
 # Building
 
 ## Prerequisites
