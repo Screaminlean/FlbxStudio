@@ -33,6 +33,19 @@ Current baseline: **beta-ready**.
 5. Click **Save FLBX Library** to save.
    - The dialog defaults to the current FLBX filename and folder when available.
 
+## Future features (planned)
+
+### Near-term priorities
+
+- [ ] Duplicate state action (clone an existing state in the selected asset)
+- [ ] PNG color changer for quick recolor workflows
+- [ ] Create new states directly from duplicated states with color edits
+
+### Later roadmap
+
+- [ ] PNG creator for generating new state images inside the app
+- [ ] Lightweight state editing tools to speed up HMI asset iteration
+
 # Building
 
 ## Prerequisites
