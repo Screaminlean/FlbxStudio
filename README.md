@@ -4,6 +4,10 @@ FlbxStudio is a WPF desktop tool for opening, inspecting, and editing Weintek `.
 
 Current baseline: **beta-ready**.
 
+## Screenshot
+
+![FlbxStudio main window](images/main_window.png)
+
 ## Current status
 
 - Supports loading FLBX files with catalog-based and inline/trailing asset variations.
@@ -82,3 +86,9 @@ Output:
 - Startup can be slightly slower than multi-file publish.
 - Some native/runtime components may be extracted at runtime.
 - Do not enable trimming for this WPF app unless fully validated.
+
+## Contributing and issue reporting
+
+- Contributing guide: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Bug reports: use the **Bug report** issue template
+- Feature ideas: use the **Feature request** issue template
