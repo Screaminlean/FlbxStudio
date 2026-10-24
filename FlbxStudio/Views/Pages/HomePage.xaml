@@ -1,0 +1,190 @@
+﻿<Page 
+    x:Class="FlbxStudio.Views.Pages.HomePage" 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:FlbxStudio.Views.Pages" 
+    xmlns:helpers="clr-namespace:FlbxStudio.Helpers"
+    xmlns:converters="clr-namespace:FlbxStudio.Converters"
+    xmlns:loc="clr-namespace:FlbxStudio.Extensions"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" 
+    Title="HomePage" d:DataContext="{d:DesignInstance local:HomePage, IsDesignTimeCreatable=False}" 
+    d:DesignHeight="450" d:DesignWidth="800" 
+    ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}" 
+    ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}" 
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}" 
+    mc:Ignorable="d"
+    ScrollViewer.CanContentScroll="False">
+    <Page.Resources>
+        <!-- Ensure your converters namespace is registered in your assembly -->
+        <converters:BytesToImageConverter x:Key="BytesToImageConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+        <!-- Inverse Boolean to Visibility Converter for Empty Placeholder -->
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+    </Page.Resources>
+
+    <Grid x:Name="MainGrid" Margin="10">
+        <Grid.ColumnDefinitions>
+            <!-- Left Panel: Navigation Catalog List -->
+            <ColumnDefinition Width="320" />
+            <!-- Splitter Grip Line -->
+            <ColumnDefinition Width="Auto" />
+            <!-- Right Panel: Workspace Canvas Editor -->
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ==================== LEFT CATALOG PANEL ==================== -->
+        <Grid Grid.Column="0" Background="{DynamicResource SolidBackgroundFillColorBaseBrush}" MinHeight="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Control Action Toolbar -->
+            <Border Grid.Row="0" Padding="12" BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="0,0,0,1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ui:Button Grid.Column="0" Icon="{ui:SymbolIcon FolderOpen24}" Command="{Binding ViewModel.OpenFlbxCommand, Mode=OneWay}" ToolTip="Open FLBX Library" Margin="0,0,6,0"/>
+                    <ui:Button Grid.Column="1" Icon="{ui:SymbolIcon Save24}" Command="{Binding ViewModel.SaveFlbxCommand, Mode=OneWay}" Appearance="Primary" ToolTip="Save FLBX Library" Margin="0,0,6,0"/>
+                    <ui:Button Grid.Column="2" Icon="{ui:SymbolIcon Add24}" Command="{Binding ViewModel.AddNewAssetCommand, Mode=OneWay}" Content="Add Asset" HorizontalAlignment="Stretch"/>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="1" Margin="8,8,8,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <ComboBox Grid.Row="0"
+                          Margin="0,0,0,8"
+                          x:Name="ProgramLibraryFoldersComboBox"
+                          ItemsSource="{Binding ViewModel.ProgramLibraryFolders, Mode=OneWay}"
+                          SelectedItem="{Binding ViewModel.SelectedProgramLibraryFolder, Mode=TwoWay}"
+                          DisplayMemberPath="Name"
+                          MinWidth="220" />
+
+                <ComboBox Grid.Row="1"
+                          x:Name="ProgramLibraryFilesComboBox"
+                          ItemsSource="{Binding ViewModel.ProgramLibraryFiles, Mode=OneWay}"
+                          SelectedItem="{Binding ViewModel.SelectedProgramLibraryFile, Mode=TwoWay}"
+                          DisplayMemberPath="Name"
+                          MinWidth="220" />
+            </Grid>
+
+            <!-- Asset Registry View Selector Loop -->
+            <ui:ListView Grid.Row="2" Margin="5"
+                         ItemsSource="{Binding ViewModel.Assets, Mode=OneWay}"
+                         SelectedItem="{Binding ViewModel.SelectedAsset, Mode=TwoWay}"
+                         Padding="8"
+                         VerticalAlignment="Stretch"
+                         MinHeight="0"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         ScrollViewer.CanContentScroll="True"
+                         d:ItemsSource="{d:SampleData ItemCount=5}">
+                <ui:ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="4,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="{Binding AssetName, Mode=OneWay}" VerticalAlignment="Center" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                            <ui:Badge Grid.Column="1" Content="{Binding States.Count, Mode=OneWay}" Appearance="Secondary" MinWidth="24" VerticalAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </ui:ListView.ItemTemplate>
+            </ui:ListView>
+        </Grid>
+
+        <!-- Dynamic Grid Vertical Splitter Element -->
+        <GridSplitter Grid.Column="1" Width="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="{DynamicResource CardStrokeColorDefaultBrush}"/>
+
+        <!-- ==================== RIGHT EDITOR PANEL ==================== -->
+        <Grid Grid.Column="2" Background="{DynamicResource ApplicationBackgroundBrush}">
+
+            <!-- EMPTY WORKSPACE PLACEHOLDER STATE VIEW -->
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40"
+                        Visibility="{Binding ViewModel.HasSelectedAsset, Mode=OneWay, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                <ui:SymbolIcon Symbol="Shapes24" Filled="False" FontSize="48" Foreground="{DynamicResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                <TextBlock Text="No Asset Selected" FontSize="20" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,8"/>
+                <TextBlock Text="Load an existing .flbx file or append a new asset block to customize HMI visuals." Foreground="{DynamicResource TextFillColorSecondaryBrush}" TextAlignment="Center" MaxWidth="320" HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- ACTIVE CANVAS PROPERTIES INTERACTION CONTENT VIEW -->
+            <Grid Margin="10" MinHeight="0" Visibility="{Binding ViewModel.HasSelectedAsset, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+
+                    <RowDefinition Height="Auto"/>
+                    <!-- Interactive Multi-Frame Flow Display Layout Container Wrapper -->
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Active Work Item Configuration Details Head Bar -->
+                <Grid Grid.Row="0" Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ui:TextBox Grid.Column="0" Text="{Binding ViewModel.SelectedAsset.AssetName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Asset Identifier Token ID" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <ui:Button Grid.Column="1" Icon="{ui:SymbolIcon ImageAdd24}" Command="{Binding ViewModel.AddStateToSelectedAssetCommand, Mode=OneWay}" Content="Import Frame(s)" Appearance="Success" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <ui:Button Grid.Column="2" Icon="{ui:SymbolIcon Delete24}" Command="{Binding ViewModel.RemoveSelectedAssetCommand, Mode=OneWay}" Content="Delete Asset" Appearance="Secondary" VerticalAlignment="Center"/>
+                </Grid>
+
+                <!-- Responsive Wrap Container Tracking Image Frames List Template Loop -->
+                <ui:ListView Grid.Row="1"
+                             ItemsSource="{Binding ViewModel.SelectedAsset.States, Mode=OneWay}"
+                             VerticalAlignment="Stretch"
+                             MinHeight="0"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.CanContentScroll="True"
+                             Padding="0,4">
+                    <ui:ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ui:ListView.ItemsPanel>
+                    <ui:ListView.ItemTemplate>
+                        <DataTemplate>
+                            <!-- Elegant Windows 11 Acrylic Element Blueprint Workspace Shell Frame Base -->
+                            <ui:Card Width="180" Height="235" Margin="0,0,12,12" Padding="12">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Sequence Framework Position Identifier Badge Title Row -->
+                                    <TextBlock Grid.Row="0" Text="{Binding StateIndex, StringFormat='State #{0}', Mode=OneWay}" HorizontalAlignment="Center" Margin="0,0,0,10" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+
+                                    <!-- Rendered Canvas Transparent Grid Base Container Layer Frame -->
+                                    <Border Grid.Row="1" Background="{DynamicResource ControlAltFillColorSecondaryBrush}" CornerRadius="4" BorderThickness="1" BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" Margin="0,0,0,10">
+                                        <!-- Real Binary Extraction Image Wrapper Canvas Anchor Target Element Point -->
+                                        <Image Source="{Binding RawImageData, Mode=OneWay, Converter={StaticResource BytesToImageConverter}}" Stretch="Uniform" Margin="8" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                    </Border>
+
+                                    <!-- Operational Frame Purge Control Mechanism Layout Action Trigger -->
+                                    <ui:Button Grid.Row="2" Icon="{ui:SymbolIcon Delete20}" Appearance="Danger" Content="Remove" HorizontalAlignment="Stretch" Command="{Binding DataContext.ViewModel.RemoveStateCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}"/>
+                                </Grid>
+                            </ui:Card>
+                        </DataTemplate>
+                    </ui:ListView.ItemTemplate>
+                </ui:ListView>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

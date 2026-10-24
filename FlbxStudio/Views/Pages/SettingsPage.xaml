@@ -1,0 +1,205 @@
+﻿<Page
+    x:Class="FlbxStudio.Views.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:FlbxStudio.Helpers"
+    xmlns:converters="clr-namespace:FlbxStudio.Converters"
+    xmlns:loc="clr-namespace:FlbxStudio.Extensions"
+    xmlns:local="clr-namespace:FlbxStudio.Views.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="SettingsPage"
+    d:DataContext="{d:DesignInstance local:SettingsPage,
+                                     IsDesignTimeCreatable=False}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+    ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <converters:ThemeToIndexConverter x:Key="ThemeToIndexConverter" />
+    </Page.Resources>
+    <TabControl Margin="0,8,0,0">
+        <TabItem IsSelected="True">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon Margin="0,0,6,0" Symbol="PersonSettings20" />
+                    <TextBlock Text="{loc:Localize Key=UserSettings}" />
+                </StackPanel>
+            </TabItem.Header>
+            <StackPanel Margin="0,0,0,24">
+                <ui:TextBlock
+                    Margin="0,0,0,8"
+                    FontTypography="BodyStrong"
+                    Text="{loc:Localize Key=Appearance_Behavior}" />
+                <ui:CardControl Margin="0,0,0,12" Icon="{ui:SymbolIcon Color24}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ui:TextBlock
+                        Grid.Row="0"
+                        FontTypography="Body"
+                        Text="{loc:Localize Key=AppTheme}" />
+                            <ui:TextBlock
+                        Grid.Row="1"
+                        Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{loc:Localize Key=AppThemeDescription}" />
+                        </Grid>
+                    </ui:CardControl.Header>
+                    <ComboBox
+                        Grid.Column="1"
+                        MinWidth="200"
+                        ItemsSource="{Binding ViewModel.Themes}"
+                        DisplayMemberPath="Name"
+                        SelectedValuePath="Name"
+                        SelectedItem="{Binding ViewModel.SelectedTheme}"
+                         />
+                </ui:CardControl>
+
+                <ui:CardControl Margin="0,0,0,12" Icon="{ui:SymbolIcon Folder24}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ui:TextBlock
+                                Grid.Row="0"
+                                FontTypography="Body"
+                                Text="User Library Path" />
+                            <ui:TextBlock
+                                Grid.Row="1"
+                                Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
+                                Text="Default library path for your user profile." />
+                        </Grid>
+                    </ui:CardControl.Header>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ui:TextBox
+                            Grid.Column="0"
+                            MinWidth="320"
+                            Margin="0,0,8,0"
+                            Text="{Binding ViewModel.UserLibraryPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <ui:Button
+                            Grid.Column="1"
+                            Icon="{ui:SymbolIcon FolderOpen24}"
+                            Command="{Binding ViewModel.BrowseUserLibraryPathButtonCommand, Mode=OneWay}"
+                            ToolTip="Browse folder" />
+                    </Grid>
+                </ui:CardControl>
+
+                <ui:CardControl Margin="0,0,0,12" Icon="{ui:SymbolIcon GlobePerson24}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ui:TextBlock
+                                Grid.Row="0"
+                                FontTypography="Body"
+                                Text="{loc:Localize Key=AppLanguage}" />
+                            <ui:TextBlock
+                                Grid.Row="1"
+                                Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
+                                Text="{loc:Localize Key=AppLanguageDescription}" />
+                        </Grid>
+                    </ui:CardControl.Header>
+                    <ComboBox
+                        Grid.Column="1"
+                        MinWidth="200"
+                        ItemsSource="{Binding ViewModel.Languages}"
+                        SelectedItem="{Binding ViewModel.SelectedLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         />
+                </ui:CardControl>
+
+                <Border HorizontalAlignment="Center">
+                    <ui:Button
+                        Width="200"
+                        Command="{Binding ViewModel.SaveUserSettingsCommand}"
+                        Content="{loc:Localize Key=SaveButton}" />
+                </Border>
+            </StackPanel>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon Margin="0,0,6,0" Symbol="Settings24" />
+                    <TextBlock Text="{loc:Localize Key=AppSettings}" />
+                </StackPanel>
+            </TabItem.Header>
+            <StackPanel>
+                <ui:CardControl Margin="0,0,0,12" Icon="{ui:SymbolIcon Folder24}">
+                    <ui:CardControl.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ui:TextBlock
+                                Grid.Row="0"
+                                FontTypography="Body"
+                                Text="EasyBuilder Library Path" />
+                            <ui:TextBlock
+                                Grid.Row="1"
+                                Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
+                                Text="Shared application path to EasyBuilder picture libraries." />
+                        </Grid>
+                    </ui:CardControl.Header>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ui:TextBox
+                            Grid.Column="0"
+                            MinWidth="320"
+                            Margin="0,0,8,0"
+                            Text="{Binding ViewModel.EasyBuilderLibraryPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <ui:Button
+                            Grid.Column="1"
+                            Icon="{ui:SymbolIcon FolderOpen24}"
+                            Command="{Binding ViewModel.BrowseEasyBuilderLibraryPathButtonCommand, Mode=OneWay}"
+                            ToolTip="Browse folder" />
+                    </Grid>
+                </ui:CardControl>
+
+                <Border HorizontalAlignment="Center">
+                    <ui:Button
+                        Width="200"
+                        Command="{Binding ViewModel.SaveApplicationSettingsCommand}"
+                        Content="{loc:Localize Key=SaveButton}" />
+                </Border>
+            </StackPanel>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon Margin="0,0,6,0" Symbol="BookInformation24" />
+                    <TextBlock Text="{loc:Localize Key=About}" />
+                </StackPanel>
+            </TabItem.Header>
+            <Grid>
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,24,0,0"
+                        FontSize="20"
+                        FontWeight="Medium"
+                        Text="{loc:Localize Key=About}" />
+                    <TextBlock Margin="0,12,0,0" Text="{Binding ViewModel.AppVersion, Mode=OneWay}" />
+                </StackPanel>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Page>

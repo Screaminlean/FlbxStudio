@@ -1,0 +1,23 @@
+{
+  "Search": "Search",
+  "SaveButton": "Save",
+  "ExitButton": "Exit",
+  "ClickMeButton": "Click Me!",
+  "UserSettings": "User Settings",
+  "AppSettings": "App Settings",
+  "Appearance_Behavior": "Appearance & behavior",
+  "AppTheme": "App Theme",
+  "AppThemeDescription": "Select which app theme to display.",
+  "AppLanguage": "App Language",
+  "AppLanguageDescription": "Select which app language to use.",
+  "About": "About",
+  "Home": "Home",
+  "Data": "Data",
+  "Settings": "Settings",
+  "MessageSuccessTitle": "Success",
+  "MessageErrorTitle": "Error",
+  "MessageUserSettingsSaved": "User configuration has been saved successfully.",
+  "MessageAppSettingsSaved": "App configuration has been saved successfully.",
+  "MessageUserSettingsSaveError": "User configuration failed to save.",
+  "MessageAppSettingsSaveError": "App configuration failed to save."
+}
