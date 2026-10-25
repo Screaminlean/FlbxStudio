@@ -163,6 +163,14 @@ namespace FlbxStudio.ViewModels.Windows
                 TargetPageType = typeof(Views.Pages.UserPage)
             });
 
+            // Add PNG Lab navigation item
+            MenuItems.Add(new NavigationViewItem()
+            {
+                Content = "PNG Lab",
+                Icon = new SymbolIcon { Symbol = SymbolRegular.Image24 },
+                TargetPageType = typeof(Views.Pages.PngLabPage)
+            });
+
         }
 
         /// <summary>
