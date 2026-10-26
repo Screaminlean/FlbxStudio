@@ -378,48 +378,58 @@ public class FlbxService : IFlbxService
         using (FileStream fs = new FileStream(outputPath, FileMode.Create, FileAccess.Write))
         using (BinaryWriter writer = new BinaryWriter(fs))
         {
+            const int catalogOffsetBias = 7;
+            int catalogAssetCount = uiAssets.Count > 0 ? 1 : 0;
+
             writer.Write((short)3);
             writer.Write((short)4);
             writer.Write(Encoding.ASCII.GetBytes("flbx"));
-            writer.Write((short)uiAssets.Count);
+            writer.Write((short)catalogAssetCount);
 
-            int currentDataOffset = 10;
-            foreach (var asset in uiAssets)
+            if (catalogAssetCount == 1)
             {
-                currentDataOffset += 4 + 2 + 2 + Encoding.ASCII.GetByteCount(asset.AssetName);
-            }
+                var firstAsset = uiAssets[0];
+                int currentDataOffset = 10 + 4 + 2 + 2 + Encoding.ASCII.GetByteCount(firstAsset.AssetName);
 
-            for (short i = 0; i < uiAssets.Count; i++)
-            {
-                var asset = uiAssets[i];
-                writer.Write(currentDataOffset);
-                writer.Write(i);
+                writer.Write(currentDataOffset - catalogOffsetBias);
+                writer.Write((short)1);
 
-                byte[] nameBytes = Encoding.ASCII.GetBytes(asset.AssetName);
-                writer.Write((short)nameBytes.Length);
-                writer.Write(nameBytes);
+                byte[] firstNameBytes = Encoding.ASCII.GetBytes(firstAsset.AssetName);
+                writer.Write((short)firstNameBytes.Length);
+                writer.Write(firstNameBytes);
 
-                foreach (var state in asset.States)
+                WriteAssetDataBlock(writer, firstAsset);
+
+                for (short i = 1; i < uiAssets.Count; i++)
                 {
-                    currentDataOffset += 27 + state.RawImageData.Length;
+                    var asset = uiAssets[i];
+
+                    byte[] nameBytes = Encoding.ASCII.GetBytes(asset.AssetName);
+                    writer.Write((short)(i + 1));
+                    writer.Write((short)nameBytes.Length);
+                    writer.Write(nameBytes);
+
+                    WriteAssetDataBlock(writer, asset);
                 }
             }
+        }
+    }
 
-            foreach (var asset in uiAssets)
-            {
-                for (short stateIdx = 0; stateIdx < asset.States.Count; stateIdx++)
-                {
-                    var state = asset.States[stateIdx];
-                    writer.Write(stateIdx);
-                    writer.Write((short)3);
-                    writer.Write(Encoding.ASCII.GetBytes("PNG"));
-                    writer.Write(asset.States.Count);
-                    writer.Write((long)0);
-                    writer.Write(new byte[] { 0xFF, 0xFF, 0xFF, 0x00 });
-                    writer.Write(state.RawImageData.Length);
-                    writer.Write(state.RawImageData);
-                }
-            }
+    private static void WriteAssetDataBlock(BinaryWriter writer, HmiVectorAsset asset)
+    {
+        writer.Write(asset.States.Count);
+
+        for (short stateIdx = 0; stateIdx < asset.States.Count; stateIdx++)
+        {
+            var state = asset.States[stateIdx];
+            writer.Write((short)(stateIdx + 1));
+            writer.Write((short)3);
+            writer.Write(Encoding.ASCII.GetBytes("PNG"));
+            writer.Write(asset.States.Count);
+            writer.Write(0);
+            writer.Write(new byte[] { 0xFF, 0xFF, 0xFF, 0x00 });
+            writer.Write(state.RawImageData.Length);
+            writer.Write(state.RawImageData);
         }
     }
 }
